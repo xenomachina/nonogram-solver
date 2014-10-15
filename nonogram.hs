@@ -7,6 +7,8 @@
 -- Also, I'm writing this to learn Haskell, so my code might be
 -- weird/non-idiomatic.
 
+{-# LANGUAGE NoMonomorphismRestriction #-}
+
 data Puzzle colorT = Puzzle {
   rowConstraints :: [Constraint],
   colConstraints :: [Constraint],

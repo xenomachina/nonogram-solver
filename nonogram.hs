@@ -17,11 +17,11 @@ type Row = [Maybe Bool]
 
 type Constraint = [Int]
 
+makePuzzle :: [Constraint] -> [Constraint] -> Puzzle colorT
 makePuzzle rowConstraints colConstraints =
   Puzzle {
     rowConstraints = rowConstraints,
     colConstraints = colConstraints,
-    rows = take (length rowConstraints)
-              (repeat (take (length colConstraints)
-                  (repeat Nothing)))
+    rows = take (length rowConstraints) . repeat .
+           take (length colConstraints) . repeat $ Nothing
   }

@@ -76,6 +76,10 @@ solveRow constraint row =
       fmap (fmap Just) . filter (isCompatible row)
         $ allPlacements constraint (length row)
 
+iterateSolution :: Puzzle -> Puzzle
+iterateSolution p =
+  p { rows = [solveRow rc row | (rc, row) <- zip (rowConstraints p) (rows p)] }
+
 cellToChar :: Maybe Color -> Char
 cellToChar Nothing = '?'
 cellToChar (Just c) = if c then '■' else ' '

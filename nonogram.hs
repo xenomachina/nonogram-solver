@@ -48,3 +48,12 @@ allPlacements (x:xs) len =
     start <- slicePlacements x len
     rest <- allPlacements xs (len - (length start) - 1)
     return $ take len $ start ++ [False] ++ rest
+
+-- Tests if the known parts of a solution are compatible with a tentative
+-- solution.
+isCompatible :: Eq a => [Maybe a] -> [a] -> Bool
+isCompatible [] [] = True
+isCompatible [] _ = False
+isCompatible _ [] = False
+isCompatible (Nothing:xs) (_:ys) = isCompatible xs ys
+isCompatible (Just x:xs) (y:ys) = x == y && isCompatible xs ys

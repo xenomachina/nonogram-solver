@@ -35,10 +35,12 @@ makePuzzle rcs ccs =
 cols :: Puzzle -> [[Maybe Color]]
 cols = transpose . rows
 
+-- Computes list of placements for a single "slice"
 slicePlacements :: Int -> Int -> [[Color]]
 slicePlacements colorLen totalSpace = fmap f [0..(totalSpace - colorLen)]
   where f n = replicate n False ++ replicate colorLen True
 
+-- Computes complete list of upossible placements for a set of slices
 allPlacements :: Constraint -> Int -> [[Color]]
 allPlacements [] len = [replicate len False]
 allPlacements (x:xs) len =

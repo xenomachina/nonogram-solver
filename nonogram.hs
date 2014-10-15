@@ -9,7 +9,7 @@
 
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
-data Puzzle colorT = Puzzle {
+data Puzzle = Puzzle {
   rowConstraints :: [Constraint],
   colConstraints :: [Constraint],
   rows :: [Row]
@@ -19,7 +19,7 @@ type Row = [Maybe Bool]
 
 type Constraint = [Int]
 
-makePuzzle :: [Constraint] -> [Constraint] -> Puzzle colorT
+makePuzzle :: [Constraint] -> [Constraint] -> Puzzle
 makePuzzle rowConstraints colConstraints =
   Puzzle {
     rowConstraints = rowConstraints,

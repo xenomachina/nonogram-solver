@@ -38,3 +38,11 @@ cols = transpose . rows
 slicePlacements :: Int -> Int -> [[Color]]
 slicePlacements colorLen totalSpace = fmap f [0..(totalSpace - colorLen)]
   where f n = replicate n False ++ replicate colorLen True
+
+allPlacements :: Constraint -> Int -> [[Color]]
+allPlacements [] len = [replicate len False]
+allPlacements (x:xs) len =
+  do
+    start <- slicePlacements x len
+    rest <- allPlacements xs (len - (length start) - 1)
+    return $ take len $ start ++ [False] ++ rest

@@ -17,6 +17,7 @@ data Puzzle = Puzzle {
   rows :: [Row]
 } deriving Show
 
+-- Nothing means we don't know the color yet
 type Row = [Maybe Color]
 
 type Constraint = [Int]

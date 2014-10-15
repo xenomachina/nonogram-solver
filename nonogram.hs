@@ -15,7 +15,7 @@ data Puzzle = Puzzle {
   rowConstraints :: [Constraint],
   colConstraints :: [Constraint],
   rows :: [Row]
-} deriving Show
+} deriving (Show, Eq)
 
 -- Nothing means we don't know the color yet
 type Row = [Maybe Color]
@@ -69,24 +69,36 @@ commonElements (Just x:xs) (Just y:ys) =
 commonElements _ _ = error "Mismatched list sizes"
 
 -- Solves a row/column as much as possible independent of other rows/columns
-solveRow :: Constraint -> Row -> Row
-solveRow constraint row =
+iterateRow :: Constraint -> Row -> Row
+iterateRow constraint row =
   foldl1' commonElements validPlacements where
     validPlacements =
       fmap (fmap Just) . filter (isCompatible row)
         $ allPlacements constraint (length row)
 
-iterateSolution :: Puzzle -> Puzzle
-iterateSolution p =
-  p { rows = [solveRow rc row | (rc, row) <- zip (rowConstraints p) (rows p)] }
+-- Iterates over a list of rows
+iterateRows :: [Constraint] -> [Row]-> [Row]
+iterateRows cs rs = [iterateRow rc row | (rc, row) <- zip cs rs]
+
+-- Iterates over the columns and then the rows
+iteratePuzzle :: Puzzle -> Puzzle
+iteratePuzzle p =
+  let cs = iterateRows (colConstraints p) (cols p) in
+  p { rows = iterateRows (rowConstraints p) (transpose cs) }
+
+-- The fixed point of f.
+fix :: Eq a => (a -> a) -> a -> a
+fix f x = if x == x' then x else fix f x'
+  where x' = f x
+
+-- Solves the puzzle as much as possible. Fails if puzzle is inconsistent
+solvePuzzle :: Puzzle -> Puzzle
+solvePuzzle p = fix iteratePuzzle p
 
 cellToChar :: Maybe Color -> Char
 cellToChar Nothing = '?'
-cellToChar (Just c) = if c then '■' else ' '
+cellToChar (Just c) = if c then '█' else ' '
 
 renderPuzzle :: Puzzle -> String
 renderPuzzle p =
   intercalate "\n" [fmap cellToChar row | row <- rows p]
-
--- from puzzle-nonograms.com: 5x5 Nonograms Puzzle ID: 1,290,514
-test1 = makePuzzle [[2],[3],[1],[1,3],[3]] [[4],[2],[1,2],[2],[2]]

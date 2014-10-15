@@ -58,3 +58,20 @@ isCompatible [] _ = False
 isCompatible _ [] = False
 isCompatible (Nothing:xs) (_:ys) = isCompatible xs ys
 isCompatible (Just x:xs) (y:ys) = x == y && isCompatible xs ys
+
+-- Finds common elements between two lists.
+commonElements :: Eq a => [Maybe a] -> [Maybe a] -> [Maybe a]
+commonElements [] [] = []
+commonElements (Nothing:xs) (_:ys) = Nothing : commonElements xs ys
+commonElements (_:xs) (Nothing:ys) = Nothing : commonElements xs ys
+commonElements (Just x:xs) (Just y:ys) =
+  (if x == y then Just x else Nothing) : commonElements xs ys
+commonElements _ _ = error "Mismatched list sizes"
+
+-- Solves a row/column as much as possible independent of other rows/columns
+solveRow :: Constraint -> Row -> Row
+solveRow constraint row =
+  foldl1' commonElements validPlacements where
+    validPlacements =
+      fmap (fmap Just) . filter (isCompatible row)
+        $ allPlacements constraint (length row)

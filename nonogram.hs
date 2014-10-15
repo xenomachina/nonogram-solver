@@ -17,9 +17,11 @@ data Puzzle = Puzzle {
   rows :: [Row]
 } deriving Show
 
-type Row = [Maybe Bool]
+type Row = [Maybe Color]
 
 type Constraint = [Int]
+
+type Color = Bool
 
 makePuzzle :: [Constraint] -> [Constraint] -> Puzzle
 makePuzzle rcs ccs =
@@ -30,7 +32,9 @@ makePuzzle rcs ccs =
   } where width = length ccs
           height = length rcs
 
-cols :: Puzzle -> [[Maybe Bool]]
+cols :: Puzzle -> [[Maybe Color]]
 cols = transpose . rows
 
-
+slicePlacements :: Int -> Int -> [[Color]]
+slicePlacements colorLen totalSpace = fmap f [0..(totalSpace - colorLen)]
+  where f n = replicate n False ++ replicate colorLen True

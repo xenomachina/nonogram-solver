@@ -20,10 +20,10 @@ type Row = [Maybe Bool]
 type Constraint = [Int]
 
 makePuzzle :: [Constraint] -> [Constraint] -> Puzzle
-makePuzzle rowConstraints colConstraints =
+makePuzzle rcs ccs =
   Puzzle {
-    rowConstraints = rowConstraints,
-    colConstraints = colConstraints,
-    rows = take (length rowConstraints) . repeat .
-           take (length colConstraints) . repeat $ Nothing
+    rowConstraints = rcs,
+    colConstraints = ccs,
+    rows = take (length rcs) . repeat .
+           take (length ccs) . repeat $ Nothing
   }

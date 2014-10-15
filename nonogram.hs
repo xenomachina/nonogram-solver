@@ -9,6 +9,8 @@
 
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
+import Data.List
+
 data Puzzle = Puzzle {
   rowConstraints :: [Constraint],
   colConstraints :: [Constraint],
@@ -27,3 +29,6 @@ makePuzzle rcs ccs =
     rows = take (length rcs) . repeat .
            take (length ccs) . repeat $ Nothing
   }
+
+cols :: Puzzle -> [[Maybe Bool]]
+cols = transpose . rows

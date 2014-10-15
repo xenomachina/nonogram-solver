@@ -75,3 +75,14 @@ solveRow constraint row =
     validPlacements =
       fmap (fmap Just) . filter (isCompatible row)
         $ allPlacements constraint (length row)
+
+cellToChar :: Maybe Color -> Char
+cellToChar Nothing = '?'
+cellToChar (Just c) = if c then '■' else ' '
+
+renderPuzzle :: Puzzle -> String
+renderPuzzle p =
+  intercalate "\n" [fmap cellToChar row | row <- rows p]
+
+-- from puzzle-nonograms.com: 5x5 Nonograms Puzzle ID: 1,290,514
+test1 = makePuzzle [[2],[3],[1],[1,3],[3]] [[4],[2],[1,2],[2],[2]]

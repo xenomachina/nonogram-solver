@@ -26,9 +26,11 @@ makePuzzle rcs ccs =
   Puzzle {
     rowConstraints = rcs,
     colConstraints = ccs,
-    rows = take (length rcs) . repeat .
-           take (length ccs) . repeat $ Nothing
-  }
+    rows = replicate height .  replicate width $ Nothing
+  } where width = length ccs
+          height = length rcs
 
 cols :: Puzzle -> [[Maybe Bool]]
 cols = transpose . rows
+
+
